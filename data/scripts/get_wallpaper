@@ -6,8 +6,12 @@
 
 desktop="$DESKTOP_SESSION"
 
+if [[ "$OSTYPE" == "darwin"* ]]; then
+        /usr/libexec/PlistBuddy -c "Print :AllSpacesAndDisplays:Desktop:Content:Choices:0:Files:0:relative"\
+        ~/Library/Application\ Support/com.apple.wallpaper/Store/Index.plist
+
 # Gnome 3, Unity:
-if [ "$desktop" == "ubuntu" ] || [ "$XDG_CURRENT_DESKTOP" == "Unity" ]; then
+elif [ "$desktop" == "ubuntu" ] || [ "$XDG_CURRENT_DESKTOP" == "Unity" ]; then
         gsettings get org.gnome.desktop.background picture-uri
 
 # XFCE
