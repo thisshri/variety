@@ -35,6 +35,16 @@
 # The default is to simply set WP=$1.
 WP=$1
 
+# This only works if the already selected background is an image
+# not a mov file.
+# When an mov file is already there then the path where we are setting the background is not there.
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    /usr/libexec/PlistBuddy \
+    -c "set AllSpacesAndDisplays:Desktop:Content:Choices:0:Files:0:relative file://$WP"\
+    ~/Library/Application\ Support/com.apple.wallpaper/Store/Index.plist;
+
+    killall WallpaperAgent;
+fi
 
 # Enlightenment
 # Needs Modules/System/DBus Extension loaded to work
