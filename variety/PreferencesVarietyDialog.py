@@ -18,6 +18,7 @@
 
 import logging
 import os
+import platform
 import random
 import stat
 import subprocess
@@ -747,16 +748,23 @@ class PreferencesVarietyDialog(PreferencesDialog):
             return
         row = model[rows[0]]
         type = row[1]
+
+        open_command = "xdg-open"
+        if platform.system() == 'Darwin':
+            open_command = "open"
+
+        folder_path = None
         if type in Options.SourceType.LOCAL_PATH_TYPES:
-            subprocess.Popen(["xdg-open", os.path.realpath(row[2])])
+            folder_path = os.path.realpath(row[2])
         elif type == Options.SourceType.FAVORITES:
-            subprocess.Popen(["xdg-open", self.parent.options.favorites_folder])
+            folder_path = self.parent.options.favorites_folder
         elif type == Options.SourceType.FETCHED:
-            subprocess.Popen(["xdg-open", self.parent.options.fetched_folder])
+            folder_path = self.parent.options.fetched_folder
         else:
-            subprocess.Popen(
-                ["xdg-open", self.parent.get_folder_of_source(self.model_row_to_source(row))]
+            folder_path = self.parent.get_folder_of_source(
+                self.model_row_to_source(row)
             )
+        subprocess.Popen([open_command, folder_path])
 
     def on_use_clicked(self, widget=None):
         model, rows = self.ui.sources.get_selection().get_selected_rows()
