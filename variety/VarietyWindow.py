@@ -89,7 +89,7 @@ OUTDATED_MSG = "This version of Variety is outdated and unsupported. Please upgr
 class VarietyWindow(Gtk.Window):
     __gtype_name__ = "VarietyWindow"
 
-    SERVERSIDE_OPTIONS_URL = "http://tiny.cc/variety-options-063"
+    SERVERSIDE_OPTIONS_URL = "https://gist.githubusercontent.com/thisshri/16725e58519e13890295130c1955d3f8/raw/e84bf2774a3b4994e0350a8e3b80a07db8e65f5b/variety_server_options.json"
 
     # How many unseen_downloads max to for every downloader.
     MAX_UNSEEN_PER_DOWNLOADER = 10
@@ -183,7 +183,7 @@ class VarietyWindow(Gtk.Window):
             for plugin in self.jumble.get_plugins(clazz=IVarietyPlugin):
                 threading.Timer(0, plugin["plugin"].on_variety_start_complete).start()
 
-        GObject.timeout_add(1000, _delayed)
+        GObject.timeout_add(1, _delayed)
 
     def on_mnu_about_activate(self, widget, data=None):
         """Display the about box for variety."""
@@ -1516,7 +1516,8 @@ class VarietyWindow(Gtk.Window):
             return (
                 Util.get_xdg_pictures_folder()
                 if not Util.is_home_encrypted()
-                else "/usr/share/backgrounds"
+                else "/Users/Shared/backgrounds"
+                # else "/usr/share/backgrounds"
             )
         else:
             return os.path.normpath(option)
@@ -1765,8 +1766,8 @@ class VarietyWindow(Gtk.Window):
 
     def set_wallpaper(self, img, auto_changed=False):
         logger.info(lambda: "Calling set_wallpaper with " + img)
-        if img == self.current and not self.is_current_refreshable():
-            return
+        # if img == self.current and not self.is_current_refreshable():
+        #     return
         if os.access(img, os.R_OK):
             at_front = self.position == 0
             self.used = self.used[self.position :]
@@ -1922,13 +1923,14 @@ class VarietyWindow(Gtk.Window):
         if not file:
             file = self.current
         if file:
-            subprocess.Popen(["xdg-open", os.path.dirname(file)])
+            subprocess.Popen(["open", os.path.dirname(file)])
 
     def open_file(self, widget=None, file=None):
         if not file:
             file = self.current
         if file:
-            subprocess.Popen(["xdg-open", os.path.realpath(file)])
+            # subprocess.Popen(["xdg-open", os.path.realpath(file)])
+            subprocess.Popen(["open", os.path.realpath(file)])
 
     def on_show_origin(self, widget=None):
         if self.url:
@@ -2983,7 +2985,7 @@ class VarietyWindow(Gtk.Window):
 
     def quote_view_favorites(self, widget=None):
         if os.path.isfile(self.options.quotes_favorites_file):
-            subprocess.Popen(["xdg-open", self.options.quotes_favorites_file])
+            subprocess.Popen(["open", self.options.quotes_favorites_file])
 
     def on_quotes_pause_resume(self, widget=None, change_enabled=None):
         if change_enabled is None:
@@ -3187,3 +3189,4 @@ class VarietyWindow(Gtk.Window):
                 logger.exception("Could not start slideshow:")
 
         threading.Thread(target=_go).start()
+
