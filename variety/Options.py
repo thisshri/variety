@@ -16,6 +16,7 @@
 import hashlib
 import logging
 import os
+import platform
 
 from configobj import ConfigObj, DuplicateError
 from variety.profile import get_profile_path
@@ -711,10 +712,14 @@ class Options:
         self.slideshow_zoom = 0.2
         self.slideshow_pan = 0.05
 
+        FOLDER_PATH = "/usr/share/backgrounds/"
+        if platform.system() == 'Darwin':
+            FOLDER_PATH = "/Users/Shared/backgrounds/"
+
         self.sources = [
             [True, Options.SourceType.FAVORITES, "The Favorites folder"],
             [True, Options.SourceType.FETCHED, "The Fetched folder"],
-            [True, Options.SourceType.FOLDER, "/usr/share/backgrounds/"],
+            [True, Options.SourceType.FOLDER, FOLDER_PATH],
             [
                 True,
                 Options.SourceType.FLICKR,
