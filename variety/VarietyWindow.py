@@ -1264,7 +1264,7 @@ class VarietyWindow(Gtk.Window):
             return None
 
         w, h = Util.get_primary_display_size()
-        cmd = "convert %s -scale %dx%d^ " % (shlex.quote(filename), w, h)
+        cmd = "magick convert %s -scale %dx%d^ " % (shlex.quote(filename), w, h)
 
         logger.info(lambda: "Applying filter: " + filter)
         cmd += filter + " "
@@ -1281,7 +1281,7 @@ class VarietyWindow(Gtk.Window):
             return None
 
         w, h = Util.get_primary_display_size()
-        cmd = "convert %s -scale %dx%d^ " % (shlex.quote(filename), w, h)
+        cmd = "magick convert %s -scale %dx%d^ " % (shlex.quote(filename), w, h)
 
         hoffset, voffset = Util.compute_trimmed_offsets(Util.get_size(filename), (w, h))
         clock_filter = self.options.clock_filter
@@ -1367,7 +1367,7 @@ class VarietyWindow(Gtk.Window):
                             self.post_filter_filename = to_set
                         else:
                             logger.warning(
-                                lambda: "Could not execute filter convert command. "
+                                lambda: "Could not execute filter magick convert command. "
                                 "Missing ImageMagick or bad filter defined? Resultcode: %d" % result
                             )
                 else:
@@ -1383,7 +1383,7 @@ class VarietyWindow(Gtk.Window):
                 target_file = os.path.join(
                     self.wallpaper_folder, "wallpaper-auto-rotated-%s.jpg" % Util.random_hash()
                 )
-                cmd = "convert %s -auto-orient %s" % (shlex.quote(to_set), shlex.quote(target_file))
+                cmd = "magick convert %s -auto-orient %s" % (shlex.quote(to_set), shlex.quote(target_file))
                 logger.info(lambda: "ImageMagick auto-rotate cmd: " + cmd)
                 cmd = cmd.encode("utf-8")
 
@@ -1392,7 +1392,7 @@ class VarietyWindow(Gtk.Window):
                     to_set = target_file
                 else:
                     logger.warning(
-                        lambda: "Could not execute auto-orient convert command. "
+                        lambda: "Could not execute auto-orient magick convert command. "
                         "Missing ImageMagick? Resultcode: %d" % result
                     )
             return to_set
@@ -1426,7 +1426,7 @@ class VarietyWindow(Gtk.Window):
                     target_file = os.path.join(
                         self.wallpaper_folder, "wallpaper-zoomed-%s.jpg" % Util.random_hash()
                     )
-                    cmd = "convert %s %s %s" % (
+                    cmd = "magick convert %s %s %s" % (
                         shlex.quote(to_set),
                         mode_data.imagemagick_cmd,
                         shlex.quote(target_file),
@@ -1439,7 +1439,7 @@ class VarietyWindow(Gtk.Window):
                         return target_file, mode
                     else:
                         logger.warning(
-                            lambda: "Could not execute auto-orient convert command. "
+                            lambda: "Could not execute auto-orient magick convert command. "
                             "Missing ImageMagick? Resultcode: %d" % result
                         )
                         return to_set, "os"
@@ -1479,7 +1479,7 @@ class VarietyWindow(Gtk.Window):
                     to_set = target_file
                 else:
                     logger.warning(
-                        lambda: "Could not execute clock convert command. "
+                        lambda: "Could not execute clock magick convert command. "
                         "Missing ImageMagick or bad filter defined? Resultcode: %d" % result
                     )
             return to_set
