@@ -170,8 +170,14 @@ class VarietyMetadata(GExiv2.Metadata):
     }
 
     def __init__(self, path):
-        super(VarietyMetadata, self).__init__(path=path)
-        self.register_xmp_namespace("https://launchpad.net/variety/", "variety")
+        self.path = path
+        super(VarietyMetadata, self).__init__()
+        super(VarietyMetadata, self).try_register_xmp_namespace(
+            "https://launchpad.net/variety/",
+            "variety"
+        )
+
+        self.open_path(self.path)
 
     def __getitem__(self, key):
         if self.has_tag(key):
@@ -191,6 +197,9 @@ class VarietyMetadata(GExiv2.Metadata):
             self.set_tag_long(key, value)
         else:
             self.set_tag_string(key, value)
+
+    def save_file(self):
+        super(VarietyMetadata, self).save_file(self.path)
 
 
 class ModuleProfiler:
