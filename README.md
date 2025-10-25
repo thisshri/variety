@@ -90,4 +90,75 @@ Regardless of how you install, you can launch Variety from the dash or applicati
 
 Run `variety --help` to see the command-line options. They allow you to control Variety from the terminal.
 
+# Running Variety from Source on macOS
 
+This section explains how to set up and run **Variety** from source code on macOS using **LaunchAgents** — a native macOS mechanism for automatically starting background services.
+
+### ⚙️ Create the LaunchAgent
+
+Create a file at:
+
+```
+~/Library/LaunchAgents/com.YOUR_USERNAME.variety.plist
+```
+
+Paste the following content into it (update paths as needed):
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" 
+    "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>Label</key>
+    <string>com.shrikant.variety</string>
+
+    <key>ProgramArguments</key>
+    <array>
+      <string>/Users/YOUR_USERNAME/.virtualenvs/variety/bin/python3</string> // venv python location
+      <string>/Users/YOUR_USERNAME/Devel/variety/bin/variety</string> // location of binery of variety
+    </array>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>KeepAlive</key>
+    <dict>
+      <key>SuccessfulExit</key>
+      <false/>
+    </dict>
+
+    <key>StandardOutPath</key>
+    <string>/tmp/variety.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>/tmp/variety.log</string>
+  </dict>
+</plist>
+```
+
+> 📝 **Tip:** Replace `YOUR_USERNAME` with your actual macOS username.
+
+---
+
+### 🚀 Load and Start the Service
+
+Once the `.plist` file is created, load it with `launchctl`:
+
+```bash
+launchctl load ~/Library/LaunchAgents/com.YOUR_USERNAME.variety.plist
+```
+
+To start it immediately (without rebooting):
+
+```bash
+launchctl start com.YOUR_USERNAME.variety
+```
+
+---
+
+### 🧩 Notes
+
+* The app will **automatically start at login** once loaded with `RunAtLoad = true`.
+* Log output (stdout + stderr) is stored in `/tmp/variety.log`.
+* If the process exits unexpectedly, macOS will automatically restart it because of the `KeepAlive` rule.
